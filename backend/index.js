@@ -17,16 +17,38 @@ const corsOptions={
     origin:true
 }
 mongoose.set("strictQuery", false)
-const connect = async()=>{
-    try {
-        await mongoose.connect(process.env.MONGO_URL, {
+
+// const connect = async()=>{
+//     try {
+//         await mongoose.connect(process.env.MONGO_URI, {
             
+//         });
+//         console.log("---Connected to Mongo---")
+//     } catch (error) {
+//         console.error("Error connecting to MongoDB:", error);
+//     }   
+// }
+
+
+const connect = async () => {
+    try {
+        const mongoUrl = process.env.MONGO_URI;
+        if (!mongoUrl) {
+            throw new Error("MONGO_URL environment variable is not set.");
+        }
+
+        await mongoose.connect(mongoUrl, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         });
         console.log("---Connected to Mongo---")
+        console.log("---Connected to Mongo---");
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
-    }   
-}
+    }
+};
+
+
 app.get("/", (req,res)=>{
     res.send("api is working")
 })
